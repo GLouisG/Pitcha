@@ -7,3 +7,11 @@ from .. import db, photos
 
 
 
+main.route('/')
+def index():
+    pitches = Pitch.query.all()
+    entertainment = Pitch.filter_by(category='Entertainment')
+    entertainment = Pitch.filter_by(category='Food')
+    entertainment = Pitch.filter_by(category='Innovative')
+    
+    
