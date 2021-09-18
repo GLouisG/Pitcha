@@ -60,6 +60,7 @@ class Vote(db.Model):
   post_id = db.Column(db.Integer, db.ForeignKey("post.id"), primary_key=True)
   post = db.relationship("Post", backref=backref("votes", cascade="all, delete-orphan"))#remove db.b--
   vo_val = db.Column(db.Boolean, nullable=False)
+  
 class Comment(db.Model):
   __tablename__='comments'    
   id = db.Column(db.Integer, primary_key=True)
