@@ -13,8 +13,8 @@ class User(db.Model, UserMixin):
   pass_secure = db.Column(db.String(255))
   pp_path = db.Column(db.String())
   pitch = db.relationship('Pitch', backref='user', lazy=True)
-  # comment = db.relationship('Comment',backref='user')
-  #user_vote = db.relationship('Vote', backref='user', lazy='dynamic')
+  comment = db.relationship('Comment',backref='user')
+  user_vote = db.relationship('Vote', backref='user', lazy='dynamic')
 
   @property
   def password(self):
@@ -55,7 +55,11 @@ class Pitch(db.Model):
 
 class Vote(db.Model):
   __tablename__='votes'
-#
+  user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+  user = db.relationship("User", backref=backref("votes", cascade="all, delete-orphan"))#removed db.b--
+  post_id = db.Column(db.Integer, db.ForeignKey("post.id"), primary_key=True)
+  post = db.relationship("Post", backref=backref("votes", cascade="all, delete-orphan"))#remove db.b--
+  vo_val = db.Column(db.Boolean, nullable=False)
 class Comment(db.Model):
   __tablename__='comments'    
   id = db.Column(db.Integer, primary_key=True)
