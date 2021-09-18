@@ -1,3 +1,4 @@
+from sqlalchemy.orm import backref
 from .import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -10,8 +11,8 @@ class User(db.Model, UserMixin):
   email = db.Column(db.String(255), nullable=False, unique=True)
   biog = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
-  pp_path = db.Column(db.String(255))
-  # pitch = db.relationship('Pitch', backref='user', lazy=True)
+  pp_path = db.Column(db.String())
+  pitch = db.relationship('Pitch', backref='user', lazy=True)
   # comment = db.relationship('Comment',backref='user')
   #user_vote = db.relationship('Vote', backref='author', lazy='dynamic')
 
@@ -32,7 +33,26 @@ class User(db.Model, UserMixin):
 
 class Pitch(db.Model):
   __tablename__='pitches'
-  #a
+  id = db.Column(db.Integer, primary_key=True)
+  category = db.Column(db.String(255))
+  content = db.Column(db.String)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  post_time = db.Column(db.DateTime, default=datetime.utcnow)
+#   comments = db.relationship('Comment', backref='pitch', lazy=True)
+#   votes = db.relationship('Vote', backref = 'pitch', lazy=True)
+
+  def save_pitch(self):
+        db.session.add(self)
+        db.session.commit()
+
+  @classmethod
+  def get_category(cls, category):
+        pitches = Pitch.query.filter_by(category=category).all()
+        return pitches
+
+  def __repr__(self):
+        return f'Pitch{self.text}'
+
 class Vote(db.Model):
   __tablename__='votes'
 #
