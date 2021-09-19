@@ -83,7 +83,7 @@ def pitch_vote(pitch_id, vote_action):
     db.session.commit()
     flash('Thanks for voting')
     upvotes = Vote.get_upvotes(pitch_id, True)
-    downvotes = Votes.get_downvotes(pitch_id, False)
+    downvotes = Vote.get_downvotes(pitch_id, False)
     return redirect(url_for('main.index', pitch_id = pitch.id))    
     
 
