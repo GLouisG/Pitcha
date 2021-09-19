@@ -1,0 +1,3 @@
+Hello {{user.username}}
+Welcome to Pitcha
+Thanks for joining this amazing community.

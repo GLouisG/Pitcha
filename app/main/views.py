@@ -96,6 +96,20 @@ def dislike(id):
     new_downvote = Downvote(user = current_user, pitch_id=id)
     new_downvote.save()     
     return redirect(url_for('main.index',id=id))        
+
+@main.route('/user/<uname>/update_profile',methods = ['GET','POST'])
+@login_required
+def update_profile(uname):
+    form = UpdateProfile()
+    user = User.query.filter_by(username = uname).first()
+    if user is None:
+        abort(404)
+    if form.validate_on_submit():
+        user.biog = form.biog.data
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('.profile',uname=user.username))
+    return render_template('profile/update.html',form =form)    
 # @main.route('/vote/<pitch_id>/<vote_action>', methods=['GET'])
 # @login_required
 # def pitch_vote(pitch_id, vote_action):
