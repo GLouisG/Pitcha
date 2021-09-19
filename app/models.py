@@ -2,7 +2,12 @@ from sqlalchemy.orm import backref
 from .import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-import datetime
+from datetime import datetime
+
+@login_manager.user_loader
+def load_user(user_id):
+
+    return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
   __tablename__='users'
@@ -12,10 +17,10 @@ class User(db.Model, UserMixin):
   biog = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
   dp_path = db.Column(db.String())
-  pitch = db.relationship('Pitch', backref='user', lazy=True)
-  comment = db.relationship('Comment',backref='user')
-  user_vote = db.relationship('Vote', backref='user', lazy='dynamic')
-
+  pitch = db.relationship('Pitch', backref='pitch_user', lazy=True)
+  comment = db.relationship('Comment',backref='comment_user')
+  upvote = db.relationship('Upvote', backref='user', lazy='dynamic')
+  downvote = db.relationship('Downvote', backref='user', lazy='dynamic')
   @property
   def password(self):
         raise AttributeError('You cannot read the password attribute')
@@ -37,9 +42,10 @@ class Pitch(db.Model):
   category = db.Column(db.String(255))
   content = db.Column(db.String)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-  post_time = db.Column(db.DateTime, default=datetime.utcnow)
-  comments = db.relationship('Comment', backref='pitch', lazy=True)
-  votes = db.relationship('Vote', backref = 'pitch', lazy=True)
+  post_time = db.Column(db.DateTime, default=datetime.utcnow())
+  comments = db.relationship('Comment', backref='pitch_comment', lazy=True)
+  upvote = db.relationship('Upvote', backref='pitch', lazy='dynamic')
+  downvote = db.relationship('Downvote', backref='pitch', lazy='dynamic')
 
   def save_pitch(self):
         db.session.add(self)
@@ -53,31 +59,45 @@ class Pitch(db.Model):
   def __repr__(self):
         return f'Pitch{self.text}'
 
-class Vote(db.Model):
-  __tablename__='votes'
-  id = db.Column(db.Integer, primary_key=True)
-  user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-  user = db.relationship("User", backref=backref("user_votes"))#removed db.b--
-  pitch_id = db.Column(db.Integer, db.ForeignKey("pitch.id"))
-  pitch = db.relationship("Post", backref=backref("post_votes"))#remove db.b--
-  vo_val = db.Column(db.Boolean, nullable=False)
-  @classmethod
-  def get_upvotes(cls,pitch_id, vo_val):
-        upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
+class Upvote(db.Model):
+    __tablename__ = 'upvotes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable = False)
+    pitch_id = db.Column(db.Integer,db.ForeignKey('pitches.id'),nullable = False)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_upvotes(cls,pitch_id):
+        upvote = Upvote.query.filter_by(pitch_id=pitch_id).all()
 
         return upvote
-  @classmethod
-  def get_downvotes(cls,pitch_id, vo_val):
-        upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
 
-        return upvote        
-           
-  def __repr__(self):
-        if self.upvote == True:
-            vote = 'Up'
-        else:
-            vote = 'Down'
-        return '<Vote - {}, from {} for {}>'.format(vote, self.user.username, self.pitch.content)      
+    def __repr__(self):
+        return f'{self.user_id}:{self.pitch_id}'
+
+class Downvote(db.Model):
+    __tablename__ = 'downvotes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable = False)
+    pitch_id = db.Column(db.Integer,db.ForeignKey('pitches.id'),nullable = False)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_downvotes(cls,pitch_id):
+        downvote = Downvote.query.filter_by(pitch_id=pitch_id).all()
+
+        return Downvote
+
+    def __repr__(self):
+        return f'{self.user_id}:{self.pitch_id}'    
 
 class Comment(db.Model):
   __tablename__='comments'    
@@ -97,3 +117,29 @@ class Comment(db.Model):
     
   def __repr__(self):
         return f'Comment:{self.comment}'
+
+#  class Vote(db.Model):
+#   __tablename__='votes'
+#   id = db.Column(db.Integer, primary_key=True)
+#   user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+#   user = db.relationship("User", backref=backref("user_votes"))#removed db.b--
+#   pitch_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+#   pitch = db.relationship("Pitch", backref=backref("post_votes"))#remove db.b--
+#   vo_val = db.Column(db.Boolean, nullable=False)
+#   @classmethod
+#   def get_upvotes(cls,pitch_id, vo_val):
+#         upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
+
+#         return upvote
+#   @classmethod
+#   def get_downvotes(cls,pitch_id, vo_val):
+#         upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
+
+#         return upvote        
+           
+#   def __repr__(self):
+#         if self.upvote == True:
+#             vote = 'Up'
+#         else:
+#             vote = 'Down'
+#         return '<Vote - {}, from {} for {}>'.format(vote, self.user.username, self.pitch.content)         

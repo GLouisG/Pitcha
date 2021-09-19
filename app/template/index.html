@@ -1,13 +1,28 @@
-{%extends base.html%}
+{%extends "base.html"%}
+{% import 'macros.html' as macro%}
+
 {% block styles%}
 {{ super() }}
 <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
 {% endblock %}
 
+{% block content %}
 <div class="jumbotron">
   <select name="categories" id="categories">
-    <option value="Innovative">Innovative/Miscellaneous</option>
-    <option value="Food">Food</option>
-    <option value="Entertainment">Entertainment</option>
+    <option value="All"><a href="#all">All</a></option>    
+    <option value="Innovative"><a href="#innovative">Innovative/Miscellaneous</a></option>
+    <option value="Food"><a href="#food">Food</a>/option>
+    <option value="Entertainment"><a href="#ent">Entertainment</a></option>
   </select> 
 </div>
+<div class="tab-content">
+  <div class="container tab-pane active" id="all"><br>
+      {{macro.display_pitches(pitches)}} </div>
+  <div class="container tab-pane fade" id="food"><br>
+      {{macro.display_pitches(food)}} </div>
+  <div class="container tab-pane fade" id="entertainment"><br>
+      {{macro.display_pitches(entertainment)}} </div>
+  <div class="container tab-pane fade" id="innovative"><br>
+      {{macro.display_pitches(innovative)}} </div>
+</div>
+{% endblock %}

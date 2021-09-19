@@ -1,19 +1,19 @@
 from . import main
 from flask import render_template, request, redirect, url_for, abort,flash
-from ..models import User, Pitch, Comment, Vote
+from ..models import User, Pitch, Comment, Upvote, Downvote
 from flask_login import login_required, current_user
-from .forms import EditProfile, PitchForm, CommentForm
+from .forms import UpdateProfile, PitchForm, CommentForm
 from .. import db, photos
 
 
 
-main.route('/')
+@main.route('/')
 def index():
     pitches = Pitch.query.all()
-    entertainment = Pitch.filter_by(category='Entertainment')
-    food = Pitch.filter_by(category='Food')
-    innovative = Pitch.filter_by(category='Innovative')
-    return render_template('index.html', pitches=pitches, ent = entertainment, food = food, innovative=innovative)    
+    entertainment = Pitch.query.filter_by(category='Entertainment')
+    food = Pitch.query.filter_by(category='Food')
+    innovative = Pitch.query.filter_by(category='Innovative')
+    return render_template('index.html', pitches=pitches, entertainment=entertainment, food = food, innovative=innovative)    
 
 @main.route('/comment/<int:pitch_id>', methods = ['pitch','GET'])
 @login_required
@@ -62,29 +62,62 @@ def update_picture(uname):
         path = f'photos/{filename}'
         user.dp_path = path
         db.session.commit()
-    return redirect(url_for('main.profile',uname=uname))    
-@main.route('/vote/<pitch_id>/<vote_action>', methods=['GET'])
+    return redirect(url_for('main.profile',uname=uname))  
+
+
+@main.route('/like/<int:id>', methods = ['POST', 'GET'])
 @login_required
-def pitch_vote(pitch_id, vote_action):
-    pitch = Pitch.query.filter_by(id = pitch_id).first_or_404()
-    vote = Vote.query.filter_by(user = current_user,pitch = pitch).first()
-
-    if vote:
-        if vote.vo_val != bool(int(vote_action)):
-            vote.vo_val = bool(int(vote_action))
-            db.session.commit()
-            return redirect(url_for('main.index', pitch_id = pitch.id))
+def like(id):
+    get_pitches = Upvote.get_upvotes(id)
+    valid_string = f'{current_user.id}:{id}'
+    for pitch in get_pitches:
+        to_str = f'{pitch}'
+        print(valid_string+" "+to_str)
+        if valid_string == to_str:
+            return redirect(url_for('main.index',id=id))
         else:
-            flash('You already voted for this pitch')
-            return redirect(url_for('main.index', pitch_id = pitch.id))
+            continue
+    new_vote = Upvote(user = current_user, pitch_id=id)
+    new_vote.save()     
+    return redirect(url_for('main.index',id=id))    
 
-    vote = Vote(user = current_user, pitch = pitch, vo_val = bool(int(vote_action)))
-    db.session.add(vote)
-    db.session.commit()
-    flash('Thanks for voting')
-    upvotes = Vote.get_upvotes(pitch_id, True)
-    downvotes = Vote.get_downvotes(pitch_id, False)
-    return redirect(url_for('main.index', pitch_id = pitch.id))    
+@main.route('/dislike/<int:id>', methods = ['POST','GET'])
+@login_required
+def dislike(id):
+    get_pitch = Downvote.get_downvotes(id)
+    valid_string = f'{current_user.id}:{id}'
+    for pit in get_pitch:
+        to_str = f'{pit}'
+        print(valid_string+" "+to_str)
+        if valid_string == to_str:
+            return redirect(url_for('main.index',id=id))
+        else:
+            continue
+    new_downvote = Downvote(user = current_user, pitch_id=id)
+    new_downvote.save()     
+    return redirect(url_for('main.index',id=id))        
+# @main.route('/vote/<pitch_id>/<vote_action>', methods=['GET'])
+# @login_required
+# def pitch_vote(pitch_id, vote_action):
+#     pitch = Pitch.query.filter_by(id = pitch_id).first_or_404()
+#     vote = Vote.query.filter_by(user = current_user,pitch = pitch).first()
+
+#     if vote:
+#         if vote.vo_val != bool(int(vote_action)):
+#             vote.vo_val = bool(int(vote_action))
+#             db.session.commit()
+#             return redirect(url_for('main.index', pitch_id = pitch.id))
+#         else:
+#             flash('You already voted for this pitch')
+#             return redirect(url_for('main.index', pitch_id = pitch.id))
+
+#     vote = Vote(user = current_user, pitch = pitch, vo_val = bool(int(vote_action)))
+#     db.session.add(vote)
+#     db.session.commit()
+#     flash('Thanks for voting')
+#     upvotes = Vote.get_upvotes(pitch_id, True)
+#     downvotes = Vote.get_downvotes(pitch_id, False)
+#     return redirect(url_for('main.index', pitch_id = pitch.id))    
     
 
     

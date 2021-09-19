@@ -1,0 +1,20 @@
+
+
+{% macro display_pitches(categorized_peaches)%}
+<div class="container-fluid">
+  <div class="row">
+    {%if categorized_peaches%}
+    {%for peach in categorized_peaches%}
+    <div class="card text-center">
+      <p>{{peach.content}}</p>
+      <footer class="blockquote-footer text-center" style="text-transform: capitalize;font-weight: normal;"><i class="fas fa-user-cowboy fa-sm"></i>
+        <small><i>
+            {{peach.user.username}}</i></small></footer><br> <br>
+    <div class="row"> 
+
+    </div>
+    {%endfor%}
+    {%endif%}
+  </div>
+</div>  
+{% endmacro %}
