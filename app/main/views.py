@@ -52,7 +52,7 @@ def new_pitch():
         new_pitch_obj = Pitch(category=category, content=content, user_id=user_id)
         new_pitch_obj.save_pitch()
         return redirect(url_for('main.index'))
-    return render_template('pitch.html', form=form)
+    return render_template('new_pitch.html', form=form)
 @main.route('/user/<uname>/update/profile',methods= ['pitch'])
 @login_required
 def update_picture(uname):
