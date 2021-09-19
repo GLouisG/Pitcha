@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
   email = db.Column(db.String(255), nullable=False, unique=True)
   biog = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
-  pp_path = db.Column(db.String())
+  dp_path = db.Column(db.String())
   pitch = db.relationship('Pitch', backref='user', lazy=True)
   comment = db.relationship('Comment',backref='user')
   user_vote = db.relationship('Vote', backref='user', lazy='dynamic')
@@ -55,12 +55,30 @@ class Pitch(db.Model):
 
 class Vote(db.Model):
   __tablename__='votes'
-  user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-  user = db.relationship("User", backref=backref("votes", cascade="all, delete-orphan"))#removed db.b--
-  post_id = db.Column(db.Integer, db.ForeignKey("post.id"), primary_key=True)
-  post = db.relationship("Post", backref=backref("votes", cascade="all, delete-orphan"))#remove db.b--
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+  user = db.relationship("User", backref=backref("user_votes"))#removed db.b--
+  pitch_id = db.Column(db.Integer, db.ForeignKey("pitch.id"))
+  pitch = db.relationship("Post", backref=backref("post_votes"))#remove db.b--
   vo_val = db.Column(db.Boolean, nullable=False)
-  
+  @classmethod
+  def get_upvotes(cls,pitch_id, vo_val):
+        upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
+
+        return upvote
+  @classmethod
+  def get_downvotes(cls,pitch_id, vo_val):
+        upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
+
+        return upvote        
+           
+  def __repr__(self):
+        if self.upvote == True:
+            vote = 'Up'
+        else:
+            vote = 'Down'
+        return '<Vote - {}, from {} for {}>'.format(vote, self.user.username, self.pitch.content)      
+
 class Comment(db.Model):
   __tablename__='comments'    
   id = db.Column(db.Integer, primary_key=True)
