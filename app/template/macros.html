@@ -5,14 +5,34 @@
   <div class="row">
     {%if categorized_peaches%}
     {%for peach in categorized_peaches%}
-    <div class="card text-center">
+    <div class="card text-center" style="color:rgb(2, 2, 2)">
       <p>{{peach.content}}</p>
+      <p>{{peach.category}}</p>
       <footer class="blockquote-footer text-center" style="text-transform: capitalize;font-weight: normal;"><i class="fas fa-user-cowboy fa-sm"></i>
         <small><i>
             {{peach.user.username}}</i></small></footer><br> <br>
-    <div class="row"> 
+      <div class="row"> 
+        <div class="col-md-4">
+          <a href="{{url_for('main.like',id=peach.id)}}">
+            <i class="fa fa-angle-up fa-lg" style="color:rgb(255, 177, 8)"></i>
+            <small><i>{{peach.upvote.count()}}</i></small>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a href="{{url_for('main.dislike',id=peach.id)}}">
+            <i class="fa fa-angle-down fa-lg" style="color:rgb(255, 177, 8)"></i>
+            <small><i>{{peach.downvote.count()}}</i></small>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a href="{{url_for('main.comment',pitch_id=peach.id)}}">
+            <i class="fa fa-angle-down fa-lg" style="color:rgb(255, 177, 8)"></i>
+            <small><i>{{peach.downvote.count()}}</i></small>
+          </a>  
+        </div>
+      </div>
+      </div>
 
-    </div>
     {%endfor%}
     {%endif%}
   </div>
