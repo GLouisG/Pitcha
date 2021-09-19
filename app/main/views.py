@@ -30,6 +30,18 @@ def comment(pitch_id):
         return redirect(url_for('.comment', pitch_id=pitch_id))
     return render_template('comment.html', form=form, pitch=pitch, all_comments=all_comments)
 @main.route('/new_pitch', methods = ['POST','GET'])
+
+@main.route('/user/<uname>')
+def profile(uname):
+    user = User.query.filter_by(username = uname).first()
+    user_id = current_user._get_current_object().id
+    pitches = Pitch.query.filter_by(user_id = user_id).all()
+
+    if user is None:
+        abort(404)
+
+    return render_template("profile/profile.html", user=user,pitches=pitches)
+
 @login_required    
 def new_pitch():
     form = PitchForm
@@ -40,4 +52,6 @@ def new_pitch():
         new_pitch_obj = Pitch(category=category, content=content, user_id=user_id)
         new_pitch_obj.save_pitch()
         return redirect(url_for('main.index'))
-    return render_template('pitch.html', form=form)    
+    return render_template('pitch.html', form=form)
+        
+    

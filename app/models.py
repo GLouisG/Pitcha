@@ -38,8 +38,8 @@ class Pitch(db.Model):
   content = db.Column(db.String)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   post_time = db.Column(db.DateTime, default=datetime.utcnow)
-#   comments = db.relationship('Comment', backref='pitch', lazy=True)
-#   votes = db.relationship('Vote', backref = 'pitch', lazy=True)
+  comments = db.relationship('Comment', backref='pitch', lazy=True)
+  votes = db.relationship('Vote', backref = 'pitch', lazy=True)
 
   def save_pitch(self):
         db.session.add(self)
