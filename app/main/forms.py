@@ -2,7 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,TextAreaField,SubmitField,SelectField
 from wtforms.validators import Required
 
-
+class UpdateProfile(FlaskForm):
+    biog = TextAreaField('Tell us about you.',validators = [Required()])
+    submit = SubmitField('Save')
 class PitchForm(FlaskForm):
     category = SelectField('Category', choices=[('Food','Food'),('Entertainment','Entertainment'),('Innovative','Innovative')],validators=[Required()])
     content = TextAreaField('Your Pitch', validators=[Required()])
