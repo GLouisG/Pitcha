@@ -13,7 +13,7 @@ def index():
     entertainment = Pitch.filter_by(category='Entertainment')
     food = Pitch.filter_by(category='Food')
     innovative = Pitch.filter_by(category='Innovative')
-    return render_template('index.html', peaches=pitches, ent = entertainment, food = food, innovative=innovative)    
+    return render_template('index.html', pitches=pitches, ent = entertainment, food = food, innovative=innovative)    
 
 @main.route('/comment/<int:pitch_id>', methods = ['pitch','GET'])
 @login_required

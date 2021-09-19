@@ -1,0 +1,13 @@
+{%extends base.html%}
+{% block styles%}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+{% endblock %}
+
+<div class="jumbotron">
+  <select name="categories" id="categories">
+    <option value="Innovative">Innovative/Miscellaneous</option>
+    <option value="Food">Food</option>
+    <option value="Entertainment">Entertainment</option>
+  </select> 
+</div>
