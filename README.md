@@ -12,7 +12,7 @@ A web app made using flask that allows users to create posts about pitches of va
 - To run the program ideally ensure you have any version of python greater than 3.6 and ensure the required dependencies are installed in your virtual environment.   
 - To run tests use the command (virtual)$ python3 manage.py test   
 - It is live on Heroku and can be seen by following the link.    
-- Link: ~Link here!~  
+- Link: http://peacha.herokuapp.com/  
 ## Demo
 - ![PRESENT1](https://user-images.githubusercontent.com/86976233/134023963-f6e1554a-1142-484e-b601-c869102ab1bc.png)  
 - ![PRESENT2](https://user-images.githubusercontent.com/86976233/134023988-f7b39d4b-8726-46a0-a454-fb8f01858529.png)  
