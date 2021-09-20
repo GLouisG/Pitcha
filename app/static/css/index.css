@@ -12,3 +12,6 @@ background-image: url(https://d310a9hpolx59w.cloudfront.net/product_photos/25915
 background-size: cover;
 background-repeat: no-repeat;  
 }
+#innovative, #entertainment, #food{
+  display: none;
+}
