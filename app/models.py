@@ -118,28 +118,4 @@ class Comment(db.Model):
   def __repr__(self):
         return f'Comment:{self.comment}'
 
-#  class Vote(db.Model):
-#   __tablename__='votes'
-#   id = db.Column(db.Integer, primary_key=True)
-#   user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-#   user = db.relationship("User", backref=backref("user_votes"))#removed db.b--
-#   pitch_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
-#   pitch = db.relationship("Pitch", backref=backref("post_votes"))#remove db.b--
-#   vo_val = db.Column(db.Boolean, nullable=False)
-#   @classmethod
-#   def get_upvotes(cls,pitch_id, vo_val):
-#         upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
-
-#         return upvote
-#   @classmethod
-#   def get_downvotes(cls,pitch_id, vo_val):
-#         upvote = Vote.query.filter_by(pitch_id=pitch_id, vo_val=vo_val).all()
-
-#         return upvote        
-           
-#   def __repr__(self):
-#         if self.upvote == True:
-#             vote = 'Up'
-#         else:
-#             vote = 'Down'
-#         return '<Vote - {}, from {} for {}>'.format(vote, self.user.username, self.pitch.content)         
+     
