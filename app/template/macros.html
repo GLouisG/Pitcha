@@ -1,33 +1,35 @@
-
+<link 
+  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" 
+  rel="stylesheet"  type='text/css'>
 
 {% macro display_pitches(categorized_peaches)%}
 <div class="container-fluid" style="background-color:rgb(139, 9, 9)">
   <div class="row">
     {%if categorized_peaches%}
     {%for peach in categorized_peaches%}
-    <div class="card text-center" style="color:rgb(248, 149, 0); background-color:rgb(0,0,0)">
+    <div class="card text-center" style="color:rgb(248, 149, 0); background-color:rgb(0,0,0); border: 1px solid rgb(201, 15, 15)">
       <p>{{peach.content}}</p>
       <p>{{peach.category}}</p>
-      <footer class="blockquote-footer text-center" style="text-transform: capitalize;font-weight: normal;"><i class="fas fa-user-cowboy fa-sm"></i>
+      <footer class="blockquote-footer text-center" style="text-transform: capitalize;font-weight: normal;color:rgb(255, 177, 8);"><i class="fa fa-user"></i>
         <small><i>
             {{peach.user.username}}</i></small></footer><br> <br>
       <div class="row"> 
         <div class="col-md-4">
           <a href="{{url_for('main.like',id=peach.id)}}">
-            <i class="fa fa-angle-up fa-lg" style="color:rgb(255, 177, 8)"></i>
-            <small><i>{{peach.upvote.count()}}</i></small>
+            <i class="fa fa-angle-up fa-lg" style="color:rgb(255, 177, 8);"></i>
+            <small><i>Dislikes: {{peach.upvote.count()}}</i></small>
           </a>
         </div>
         <div class="col-md-4">
           <a href="{{url_for('main.dislike',id=peach.id)}}">
-            <i class="fa fa-angle-down fa-lg" style="color:rgb(255, 177, 8)"></i>
-            <small><i>{{peach.downvote.count()}}</i></small>
+            <i class="fa fa-angle-down" style="color:rgb(255, 177, 8);"></i>
+            <small><i>Likes: {{peach.downvote.count()}}</i></small>
           </a>
         </div>
         <div class="col-md-4">
           <a href="{{url_for('main.comment',pitch_id=peach.id)}}">
-            <i class="fa fa-angle-down fa-lg" style="color:rgb(255, 177, 8)"></i>
-            <small><i>{{peach.downvote.count()}}</i></small>
+            <i class="fa fa-pencil " style="color:rgb(255, 177, 8)"></i>
+            <small><i>Comments</i></small>
           </a>  
         </div>
       </div>

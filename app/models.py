@@ -17,8 +17,8 @@ class User(db.Model, UserMixin):
   biog = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
   dp_path = db.Column(db.String())
-  pitch = db.relationship('Pitch', backref='pitch_user', lazy=True)
-  comment = db.relationship('Comment',backref='comment_user')
+  pitch = db.relationship('Pitch', backref='user', lazy=True)
+  comment = db.relationship('Comment',backref='user')
   upvote = db.relationship('Upvote', backref='user', lazy='dynamic')
   downvote = db.relationship('Downvote', backref='user', lazy='dynamic')
   @property
@@ -43,7 +43,7 @@ class Pitch(db.Model):
   content = db.Column(db.String)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   post_time = db.Column(db.DateTime, default=datetime.utcnow())
-  comments = db.relationship('Comment', backref='pitch_comment', lazy=True)
+  comments = db.relationship('Comment', backref='pitch', lazy=True)
   upvote = db.relationship('Upvote', backref='pitch', lazy='dynamic')
   downvote = db.relationship('Downvote', backref='pitch', lazy='dynamic')
 
@@ -57,7 +57,7 @@ class Pitch(db.Model):
         return pitches
 
   def __repr__(self):
-        return f'Pitch{self.text}'
+        return f'Pitch{self.content}'
 
 class Upvote(db.Model):
     __tablename__ = 'upvotes'
@@ -94,7 +94,7 @@ class Downvote(db.Model):
     def get_downvotes(cls,pitch_id):
         downvote = Downvote.query.filter_by(pitch_id=pitch_id).all()
 
-        return Downvote
+        return downvote
 
     def __repr__(self):
         return f'{self.user_id}:{self.pitch_id}'    

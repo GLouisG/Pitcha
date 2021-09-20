@@ -5,3 +5,10 @@
 option, select{
   background-color: red
 }
+.container{
+Height: 100vh;
+width: 100vw;  
+background-image: url(https://d310a9hpolx59w.cloudfront.net/product_photos/25915314/il_fullxfull.665434515_sclm_original.jpg);
+background-size: cover;
+background-repeat: no-repeat;  
+}

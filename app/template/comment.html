@@ -1,8 +1,6 @@
 {% extends 'base.html'%}
 {% import 'bootstrap/wtf.html' as wtf%}
 
-{% extends 'base.html'%}
-{% import 'bootstrap/wtf.html' as wtf%}
 <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Courgette&display=swap" rel="stylesheet">
 
@@ -12,13 +10,13 @@
 <div class="jumbotron" style="background-color: rgb(247, 160, 0);">
   {{wtf.quick_form(form)}}
 </div>
-{%if comment%}
-{% for comment in all_comments %}
+{%if all_comments%}
+{%for comment in all_comments%}
 <div class="card" style="background-color: rgb(10, 10, 10); color: rgb(245, 119, 17); border:1px solid red;">
 <h5>{{comment.comment}}</h5>
 <p>{{comment.user.username}}</p>
 </div>
-{%endfor}
+{%endfor%}
 {%else%}
 <h5>Be the first!</h5>
 {%endif%}

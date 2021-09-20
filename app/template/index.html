@@ -7,22 +7,62 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-  <select name="categories" id="categories">
-    <option value="All"><a href="#all">All</a></option>    
-    <option value="Innovative"><a href="#innovative">Innovative/Miscellaneous</a></option>
-    <option value="Food"><a href="#food">Food</a></option>
-    <option value="Entertainment"><a href="#ent">Entertainment</a></option>
-  </select> 
+<div class="container">
+  <div class="jumbotron">
+    <ul name="categories" id="categories">
+      <li id="alle" value="All">All</li>
+      <li id="ent" value="Entertainment">Entertainment</li>
+      <li id="cuisine"  value="Food">Food</li>
+      <li value="Innovative"id="innov">Innovative/Miscellaneous</li>
+     
+    </ul> 
+  </div>
+  <div class="contents">
+    <div class="jumbotron" id="all"><br>
+        <h2>ALL</h2>
+        {{macro.display_pitches(pitches)}} </div>
+    <div class="jumbotron" id="food"><br>
+      <h2>FOOD</h2>
+        {{macro.display_pitches(food)}} </div>
+    <div class="jumbotron" id="entertainment"><br>
+        <h2>ENTERTAINMENT</h2>
+        {{macro.display_pitches(entertainment)}} </div>
+    <div class="jumbotron" id="innovative"><br>
+      <h2>INNOVATIVE</h2>
+        {{macro.display_pitches(innovative)}} </div>
+  </div>
 </div>
-<div class="tab-content">
-  <div class="container tab-pane active" id="all"><br>
-      {{macro.display_pitches(pitches)}} </div>
-  <div class="container tab-pane fade" id="food"><br>
-      {{macro.display_pitches(food)}} </div>
-  <div class="container tab-pane fade" id="entertainment"><br>
-      {{macro.display_pitches(entertainment)}} </div>
-  <div class="container tab-pane fade" id="innovative"><br>
-      {{macro.display_pitches(innovative)}} </div>
-</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function(){
+  $('#alle').on('click', function(){
+    $('#all').show(500);
+    $('#entertainment').hide();
+    $('#innovative').hide();
+    $('#food').hide();
+  });
+  $('#ent').on('click', function(){
+    $('#entertainment').toggle(500);
+    $('#all').hide();
+    $('#innovative').hide();
+    $('#food').hide();
+  });
+  $('#cuisine').on('click', function(){
+    $('#food').toggle(500);
+    $('#all').hide(500);
+    $('#innovative').hide();
+    $('#entertainment').hide();
+  });
+  $('#innov').on('click', function(){
+    $('#innovative').toggle(500);
+    $('#all').hide(500);
+    $('#entertainment').hide();
+    $('#food').hide();
+  });
+
+});
+
+console.log('Hi')
+
+</script>
 {% endblock %}

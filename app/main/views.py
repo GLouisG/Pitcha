@@ -15,7 +15,7 @@ def index():
     innovative = Pitch.query.filter_by(category='Innovative')
     return render_template('index.html', pitches=pitches, entertainment=entertainment, food = food, innovative=innovative)    
 
-@main.route('/comment/<int:pitch_id>', methods = ['pitch','GET'])
+@main.route('/comment/<int:pitch_id>', methods = ['POST','GET'])
 @login_required
 def comment(pitch_id):
     form = CommentForm()
@@ -25,11 +25,13 @@ def comment(pitch_id):
         comment =form.comment.data
         pitch_id = pitch_id
         user_id = current_user._get_current_object().id
-        new_comment = Comment(pitch_id=pitch_id,comment=comment, user_id=user_id,)
+        new_comment = Comment(pitch_id=pitch_id,comment=comment, user_id=user_id)
         new_comment.save_comment()
+        
         return redirect(url_for('.comment', pitch_id=pitch_id))
+    print(pitch)    
     return render_template('comment.html', form=form, pitch=pitch, all_comments=all_comments)
-@main.route('/new_pitch', methods = ['pitch','GET'])
+
 
 @main.route('/user/<uname>')
 def profile(uname):
@@ -42,18 +44,34 @@ def profile(uname):
 
     return render_template("profile/profile.html", user=user,pitches=pitches)
 
+@main.route('/user/<uname>/update_profile',methods = ['GET','POST'])
+@login_required
+def update_profile(uname):
+    form = UpdateProfile()
+    user = User.query.filter_by(username = uname).first()
+    if user is None:
+        abort(404)
+    if form.validate_on_submit():
+        user.biog = form.biog.data
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('.profile',uname=user.username))
+    return render_template('profile/update.html',form =form)   
+
+@main.route('/new_pitch', methods = ['POST','GET'])
 @login_required    
 def new_pitch():
-    form = PitchForm
+    form = PitchForm()
     if form.validate_on_submit():
         category = form.category.data
         content = form.content.data
-        user_id = current_user.get_current_object.id
+        user_id = current_user._get_current_object().id
         new_pitch_obj = Pitch(category=category, content=content, user_id=user_id)
         new_pitch_obj.save_pitch()
         return redirect(url_for('main.index'))
     return render_template('new_pitch.html', form=form)
-@main.route('/user/<uname>/update/profile',methods= ['pitch'])
+    
+@main.route('/user/<uname>/update/profile',methods= ['POST'])
 @login_required
 def update_picture(uname):
     user = User.query.filter_by(username = uname).first()
@@ -65,7 +83,7 @@ def update_picture(uname):
     return redirect(url_for('main.profile',uname=uname))  
 
 
-@main.route('/like/<int:id>', methods = ['POST', 'GET'])
+@main.route('/like/<int:id>', methods = ['POST','GET'])
 @login_required
 def like(id):
     get_pitches = Upvote.get_upvotes(id)
@@ -86,8 +104,9 @@ def like(id):
 def dislike(id):
     get_pitch = Downvote.get_downvotes(id)
     valid_string = f'{current_user.id}:{id}'
-    for pit in get_pitch:
-        to_str = f'{pit}'
+    print(valid_string)
+    for pitch in get_pitch:
+        to_str = f'{pitch}'
         print(valid_string+" "+to_str)
         if valid_string == to_str:
             return redirect(url_for('main.index',id=id))
@@ -97,19 +116,7 @@ def dislike(id):
     new_downvote.save()     
     return redirect(url_for('main.index',id=id))        
 
-@main.route('/user/<uname>/update_profile',methods = ['GET','POST'])
-@login_required
-def update_profile(uname):
-    form = UpdateProfile()
-    user = User.query.filter_by(username = uname).first()
-    if user is None:
-        abort(404)
-    if form.validate_on_submit():
-        user.biog = form.biog.data
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('.profile',uname=user.username))
-    return render_template('profile/update.html',form =form)    
+ 
 # @main.route('/vote/<pitch_id>/<vote_action>', methods=['GET'])
 # @login_required
 # def pitch_vote(pitch_id, vote_action):
