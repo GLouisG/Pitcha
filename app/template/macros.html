@@ -3,27 +3,27 @@
   rel="stylesheet"  type='text/css'>
 
 {% macro display_pitches(categorized_peaches)%}
-<div class="container-fluid" style="background-color:rgb(139, 9, 9)">
+<div class="container-fluid" style="background-color:rgba(139, 9, 9, 0.575)">
   <div class="row">
     {%if categorized_peaches%}
     {%for peach in categorized_peaches%}
-    <div class="card text-center" style="color:rgb(248, 149, 0); background-color:rgb(0,0,0); border: 1px solid rgb(201, 15, 15)">
-      <p>{{peach.content}}</p>
-      <p>{{peach.category}}</p>
+    <div class="card text-center" style="color:rgb(248, 149, 0); background-color:rgba(0, 0, 0, 0.315); border: 1px solid rgba(201, 15, 15, 0.514)">
+      <p>Pitch: {{peach.content}}</p>
+      <p>Category: {{peach.category}}</p>
       <footer class="blockquote-footer text-center" style="text-transform: capitalize;font-weight: normal;color:rgb(255, 177, 8);"><i class="fa fa-user"></i>
         <small><i>
-            {{peach.user.username}}</i></small></footer><br> <br>
+            Author:{{peach.user.username}}</i></small></footer><br> <br>
       <div class="row"> 
         <div class="col-md-4">
           <a href="{{url_for('main.like',id=peach.id)}}">
             <i class="fa fa-angle-up fa-lg" style="color:rgb(255, 177, 8);"></i>
-            <small><i>Dislikes: {{peach.upvote.count()}}</i></small>
+            <small><i>Likes: {{peach.upvote.count()}}</i></small>
           </a>
         </div>
         <div class="col-md-4">
           <a href="{{url_for('main.dislike',id=peach.id)}}">
             <i class="fa fa-angle-down" style="color:rgb(255, 177, 8);"></i>
-            <small><i>Likes: {{peach.downvote.count()}}</i></small>
+            <small><i>Dislikes: {{peach.downvote.count()}}</i></small>
           </a>
         </div>
         <div class="col-md-4">

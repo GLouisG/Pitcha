@@ -5,13 +5,41 @@
 option, select{
   background-color: red
 }
+body{
+  background-image: url(https://pixy.org/src/482/4823344.jpg);
+  background-size: cover;
+background-repeat: no-repeat;
+}
 .container{
+margin-top: 0px; 
+padding-top: 0px;
 Height: 100vh;
 width: 100vw;  
-background-image: url(https://d310a9hpolx59w.cloudfront.net/product_photos/25915314/il_fullxfull.665434515_sclm_original.jpg);
-background-size: cover;
-background-repeat: no-repeat;  
+  
 }
 #innovative, #entertainment, #food{
   display: none;
+}
+ul{
+  list-style-type:none;
+}
+ul li{
+  display: inline;
+}
+#categories{
+  text-align: center
+}
+
+.categs:hover{
+  background-color: orange;
+  color: rgb(207, 8, 8);
+}
+#alle, #ent, #cuisine, #innov{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 60px;
+  padding-left: 60px;
+}
+.presentation{
+  background-color: rgba(0, 0, 0, 0.514);
 }

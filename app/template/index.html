@@ -10,24 +10,24 @@
 <div class="container">
   <div class="jumbotron">
     <ul name="categories" id="categories">
-      <li id="alle" value="All">All</li>
-      <li id="ent" value="Entertainment">Entertainment</li>
-      <li id="cuisine"  value="Food">Food</li>
-      <li value="Innovative"id="innov">Innovative/Miscellaneous</li>
+      <li class="categs" id="alle">All</li>
+      <li class="categs" id="ent">Entertainment</li>
+      <li class="categs" id="cuisine">Food</li>
+      <li class="categs" id="innov">Innovative/Miscellaneous</li>
      
     </ul> 
   </div>
   <div class="contents">
-    <div class="jumbotron" id="all"><br>
+    <div class="jumbotron presentation" id="all"><br>
         <h2>ALL</h2>
         {{macro.display_pitches(pitches)}} </div>
-    <div class="jumbotron" id="food"><br>
+    <div class="jumbotron presentation" id="food"><br>
       <h2>FOOD</h2>
         {{macro.display_pitches(food)}} </div>
-    <div class="jumbotron" id="entertainment"><br>
+    <div class="jumbotron presentation" id="entertainment"><br>
         <h2>ENTERTAINMENT</h2>
         {{macro.display_pitches(entertainment)}} </div>
-    <div class="jumbotron" id="innovative"><br>
+    <div class="jumbotron presentation" id="innovative"><br>
       <h2>INNOVATIVE</h2>
         {{macro.display_pitches(innovative)}} </div>
   </div>
